@@ -6,12 +6,23 @@ using RestaurantAPI.Models;
 
 namespace RestaurantAPI.Controllers
 {
-	[ApiController]
+    [ApiController]
 	[Route("api/[controller]")]
 	public class RestaurantController : ControllerBase
 	{
 		private readonly RestaurantDbContext _dbContext;
 		private readonly IMapper _mapper;
+
+		[HttpPost]
+		public ActionResult CreateRestaurant([FromBody] CreateRestaurantDto dto)
+		{
+			Restaurant? restaurant = _mapper.Map<Restaurant>(dto);
+
+			_dbContext.Restaurants.Add(restaurant);
+			_dbContext.SaveChanges();
+
+			return Created($"/api/restaurant/{restaurant.Id}", null);
+		}
 		
 		public RestaurantController(RestaurantDbContext dbContext, IMapper mapper)
 		{
