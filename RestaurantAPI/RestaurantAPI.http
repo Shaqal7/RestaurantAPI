@@ -7,3 +7,25 @@ GET {{RestaurantAPI_HostAddress}}/api/restaurant
 GET {{RestaurantAPI_HostAddress}}/api/restaurant/2
 
 ###
+
+POST {{RestaurantAPI_HostAddress}}/api/restaurant
+Content-Type: application/json
+
+{
+  //CreateRestaurantDto
+}
+
+###
+
+DELETE {{RestaurantAPI_HostAddress}}/api/restaurant/{id}
+
+###
+
+PUT {{RestaurantAPI_HostAddress}}/api/restaurant/{id}
+Content-Type: application/json
+
+{
+  //UpdateRestaurantDto
+}
+
+###
