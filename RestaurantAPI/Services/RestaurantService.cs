@@ -53,5 +53,19 @@ namespace RestaurantAPI.Services
 
 			return restaurant.Id;
 		}
+
+		public bool Delete(int id)
+		{
+			var restaurant = _dbcontext
+				.Restaurants
+				.FirstOrDefault(r => r.Id == id);
+
+			if (restaurant is null) return false;
+
+			_dbcontext.Restaurants.Remove(restaurant);
+			_dbcontext.SaveChanges();
+
+			return true;
+		}
 	}
 }
