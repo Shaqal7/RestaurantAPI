@@ -2,6 +2,7 @@ using RestaurantAPI.Entities;
 using RestaurantAPI.Services;
 using System.Reflection;
 using NLog.Web;
+using RestaurantAPI.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,7 @@ builder.Services.AddDbContext<RestaurantDbContext>();
 builder.Services.AddScoped<RestaurantSeeder>();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddScoped<IRestaurantService, RestaurantService>();
+builder.Services.AddScoped<ErrorHandlingMiddleware>();
 
 var app = builder.Build();
 
@@ -33,6 +35,7 @@ if (app.Environment.IsDevelopment())
 		seeder.Seed();
 	}
 }
+app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 
