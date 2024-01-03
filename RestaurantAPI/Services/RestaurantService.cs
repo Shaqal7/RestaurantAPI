@@ -9,10 +9,12 @@ namespace RestaurantAPI.Services
 	{
 		private readonly RestaurantDbContext _dbcontext;
 		private readonly IMapper _mapper;
-		public RestaurantService(RestaurantDbContext dbcontext, IMapper mapper)
+		private readonly ILogger<RestaurantService> _logger;
+		public RestaurantService(RestaurantDbContext dbcontext, IMapper mapper, ILogger<RestaurantService> logger)
 		{
 			_dbcontext = dbcontext;
 			_mapper = mapper;
+			_logger = logger;
 		}
 		public RestaurantDto GetById(int id)
 		{
@@ -33,6 +35,8 @@ namespace RestaurantAPI.Services
 
 		public IEnumerable<RestaurantDto> GetAll()
 		{
+			_logger.LogWarning($"Restaurant GET ALL action invoked");
+
 			var restaurants = _dbcontext
 				.Restaurants
 				.Include(r => r.Address)
@@ -46,6 +50,8 @@ namespace RestaurantAPI.Services
 
 		public int Create(CreateRestaurantDto dto)
 		{
+			_logger.LogWarning($"Restaurant CREATE action invoked");
+
 			var restaurant = _mapper.Map<Restaurant>(dto);
 
 			_dbcontext.Restaurants.Add(restaurant);
@@ -56,6 +62,8 @@ namespace RestaurantAPI.Services
 
 		public bool Delete(int id)
 		{
+			_logger.LogWarning($"Restaurant with id: {id} DELETE action invoked");
+
 			var restaurant = _dbcontext
 				.Restaurants
 				.FirstOrDefault(r => r.Id == id);
@@ -70,6 +78,8 @@ namespace RestaurantAPI.Services
 
 		public bool Update(UpdateRestaurantDto dto, int id)
 		{
+			_logger.LogWarning($"Restaurant with id: {id} UPDATE action invoked");
+
 			var restaurant = _dbcontext
 				.Restaurants
 				.FirstOrDefault(r => r.Id == id);

@@ -1,10 +1,14 @@
 using RestaurantAPI.Entities;
 using RestaurantAPI.Services;
 using System.Reflection;
+using NLog.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Logging.ClearProviders();
+builder.Logging.SetMinimumLevel(LogLevel.Trace);
+builder.Logging.AddNLog("nlog.config");
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
