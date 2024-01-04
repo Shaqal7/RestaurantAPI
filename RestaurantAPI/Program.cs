@@ -11,6 +11,8 @@ using FluentValidation.AspNetCore;
 using RestaurantAPI;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using RestaurantAPI.Authorization;
+using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,7 +40,11 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization(options =>
 {
 	options.AddPolicy("HasNationality", builder => builder.RequireClaim("Nationality", "German", "Polish"));
+	options.AddPolicy("Atleast18", builder => builder.AddRequirements(new MinimumAgeRequirement(18)));
 });
+
+builder.Services.AddScoped<IAuthorizationHandler, MinimumAgeRequirementHandler>();
+
 
 // Add services to the container.
 builder.Logging.ClearProviders();
