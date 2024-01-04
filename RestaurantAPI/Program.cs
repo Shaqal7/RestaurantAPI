@@ -34,6 +34,12 @@ builder.Services.AddAuthentication(options =>
 		IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey))
 	};
 });
+
+builder.Services.AddAuthorization(options =>
+{
+	options.AddPolicy("HasNationality", builder => builder.RequireClaim("Nationality", "German", "Polish"));
+});
+
 // Add services to the container.
 builder.Logging.ClearProviders();
 builder.Logging.SetMinimumLevel(LogLevel.Trace);
