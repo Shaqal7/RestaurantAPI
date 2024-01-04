@@ -16,6 +16,12 @@ namespace RestaurantAPI.Services
 		}
         public void RegisterUser(RegisterUserDto dto)
 		{
+			var existingUser = _dbContext.Users.FirstOrDefault(u => u.Email == dto.Email);
+			if (existingUser != null)
+			{
+				throw new Exception("User with this email already exists");
+			}
+
 			User newUser = new()
 			{
 				Email = dto.Email,
