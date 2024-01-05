@@ -43,7 +43,7 @@ namespace RestaurantAPI.Services
 			return result;
 		}
 
-		public IEnumerable<RestaurantDto> GetAll()
+		public IEnumerable<RestaurantDto> GetAll(string? searchPhase)
 		{
 			_logger.LogWarning($"Restaurant GET ALL action invoked");
 
@@ -51,6 +51,7 @@ namespace RestaurantAPI.Services
 				.Restaurants
 				.Include(r => r.Address)
 				.Include(r => r.Dishes)
+				.Where(r => searchPhase == null || (r.Name.ToLower().Contains(searchPhase.ToLower()) || r.Description.ToLower().Contains(searchPhase.ToLower())))
 				.ToList();
 
 			var restaurantsDtos = _mapper.Map<List<RestaurantDto>>(restaurants);
