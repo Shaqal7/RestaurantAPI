@@ -67,6 +67,8 @@ builder.Services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
 builder.Services.AddScoped<RequestTimeMiddleware>();
 builder.Services.AddSingleton(authenticationSettings);
+builder.Services.AddScoped<IUserContextService, UserContextService>();
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
