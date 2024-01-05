@@ -41,10 +41,12 @@ builder.Services.AddAuthorization(options =>
 {
 	options.AddPolicy("HasNationality", builder => builder.RequireClaim("Nationality", "German", "Polish"));
 	options.AddPolicy("Atleast18", builder => builder.AddRequirements(new MinimumAgeRequirement(18)));
+	options.AddPolicy("CreatedAtleast2Restaurants", builder => builder.AddRequirements(new CreatedMultipleRestaurantsRequirement(2)));
 });
 
 builder.Services.AddScoped<IAuthorizationHandler, MinimumAgeRequirementHandler>();
 builder.Services.AddScoped<IAuthorizationHandler, ResourceOperationRequirementHandler>();
+builder.Services.AddScoped<IAuthorizationHandler, CreatedMultipleRestaurantsRequirementHandler>();
 
 // Add services to the container.
 builder.Logging.ClearProviders();
