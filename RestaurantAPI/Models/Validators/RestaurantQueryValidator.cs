@@ -5,6 +5,7 @@ namespace RestaurantAPI.Models.Validators
 	public class RestaurantQueryValidator : AbstractValidator<RestaurantQuery>
 	{
 		private int[] allowedPageSizes = new[] { 5, 10, 15 };
+		private string[] allowedSortByColumnNames = { nameof(RestaurantDto.Name), nameof(RestaurantDto.Category), nameof(RestaurantDto.Description) };
 		public RestaurantQueryValidator()
 		{
 			RuleFor(x => x.PageNumber).GreaterThanOrEqualTo(1);
@@ -15,6 +16,9 @@ namespace RestaurantAPI.Models.Validators
 					context.AddFailure("PageSize", $"PageSize must in [{string.Join(",", allowedPageSizes)}]");
 				}
 			});
+			RuleFor(x => x.SortBy)
+				.Must(value => string.IsNullOrEmpty(value) || allowedSortByColumnNames.Contains(value))
+				.WithMessage($"Sort by is optional, or must be in [{string.Join(",", allowedSortByColumnNames)}]");
 		}
 	}
 }
