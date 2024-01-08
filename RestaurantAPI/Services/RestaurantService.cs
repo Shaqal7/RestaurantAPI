@@ -54,15 +54,15 @@ namespace RestaurantAPI.Services
 				.Include(r => r.Dishes)
 				.Where(r => query.SearchPhrase == null || (r.Name.ToLower().Contains(query.SearchPhrase.ToLower()) || r.Description.ToLower().Contains(query.SearchPhrase.ToLower())));
 
-			if (!string.IsNullOrEmpty(query.SortBy))
+			var columnsSelectors = new Dictionary<string, Expression<Func<Restaurant, object>>>
 			{
-				var columnsSelectors = new Dictionary<string, Expression<Func<Restaurant, object>>>
-				{
-					[nameof(Restaurant.Name)] = r => r.Name,
-					[nameof(Restaurant.Description)] = r => r.Description,
-					[nameof(Restaurant.Category)] = r => r.Category
-				};
+				[nameof(Restaurant.Name)] = r => r.Name,
+				[nameof(Restaurant.Description)] = r => r.Description,
+				[nameof(Restaurant.Category)] = r => r.Category
+			};
 
+			if (!string.IsNullOrEmpty(query.SortBy) && columnsSelectors.ContainsKey(query.SortBy))
+			{
 				var selectedColumn = columnsSelectors[query.SortBy];
 
 				baseQuery = query.SortDirection == SortDirection.ASC
