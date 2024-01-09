@@ -84,8 +84,8 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+app.UseResponseCaching();
 app.UseStaticFiles();
-
 app.UseCors("FrontEndClient");
 
 // Configure the HTTP request pipeline.
