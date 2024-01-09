@@ -28,5 +28,23 @@ namespace RestaurantAPI.Controllers
 				return NotFound();
 			}
 		}
+
+		[HttpPost]
+		public ActionResult Upload([FromForm] IFormFile file)
+		{
+			var rootPath = Directory.GetCurrentDirectory();
+			var fileName = file.FileName;
+			var fullPath = $"{rootPath}/PrivateFiles/{fileName}";
+
+			if(file != null && file.Length > 0)
+			{
+				using (var stream = new FileStream(fullPath, FileMode.Create))
+				{
+					file.CopyTo(stream);
+				}
+				return Ok();
+			}
+			return BadRequest();
+		}
 	}
 }
