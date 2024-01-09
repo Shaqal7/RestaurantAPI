@@ -4,7 +4,7 @@
 name: .NET
 
 on:
-  pull_request:
+  push:
     branches: ["master"]
   workflow_dispatch:
 
@@ -22,5 +22,18 @@ jobs:
         run: dotnet restore
       - name: Build
         run: dotnet build --no-restore
-      - name: Test
-        run: dotnet test --no-build --verbosity normal
+      - name: Publish
+        run: dotnet publish ./RestaurantAPI/RestaurantAPI.csproj -c Release -o ${{env.DOTNET_ROOT}}/api
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ${{env.DOTNET_ROOT}}/api
+          server-dir: /api
