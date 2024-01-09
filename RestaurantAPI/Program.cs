@@ -13,6 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using RestaurantAPI.Authorization;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -58,7 +59,6 @@ builder.Services.AddFluentValidationAutoValidation();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<RestaurantDbContext>();
 builder.Services.AddScoped<RestaurantSeeder>();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddScoped<IRestaurantService, RestaurantService>();
@@ -80,6 +80,11 @@ builder.Services.AddCors(options =>
 		.AllowAnyHeader()
 		.WithOrigins(builder.Configuration["AllowedOrigins"]);
 	});
+});
+
+builder.Services.AddDbContext<RestaurantDbContext>(options =>
+{
+	options.UseSqlServer(builder.Configuration.GetConnectionString("RestaurantsDbConnection"));
 });
 
 var app = builder.Build();
